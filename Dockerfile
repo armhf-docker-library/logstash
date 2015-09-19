@@ -1,41 +1,27 @@
-FROM  armhfbuild/java:openjdk-8-jre
+FROM armv7/armhf-java8 
 
-# default Logstash version
-ENV LOGSTASH_VERSION 1.4.5
-
-# Set default Logstash source directory
+ENV LOGSTASH_VERSION 1.5.4
 ENV LOGSTASH_SRC_DIR /opt/logstash
-
-# Set default data directory
 ENV DATA_DIR /data
 
-# Download and install Logstash
 RUN cd /tmp && \
     wget https://download.elastic.co/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz && \
     tar -xzvf ./logstash-${LOGSTASH_VERSION}.tar.gz && \
     mv ./logstash-${LOGSTASH_VERSION} ${LOGSTASH_SRC_DIR} && \
     rm ./logstash-${LOGSTASH_VERSION}.tar.gz
 
-# Install contrib plugins
-RUN ${LOGSTASH_SRC_DIR}/bin/plugin install contrib
+ADD libjffi-1.2.so /opt/libjffi-1.2.so
+ADD logstash-simple.conf /data/logstash-simple.conf
 
-# Copy build files to container root
-RUN mkdir /app
-ADD . /app
+RUN apt-get update && apt-get install -y zip && apt-get clean
+RUN mkdir -p /opt/logstash/vendor/jruby/lib/jni/arm-Linux
+RUN cp /opt/libjffi-1.2.so /opt/logstash/vendor/jruby/lib/jni/arm-Linux 
+RUN zip -g /opt/logstash/vendor/jruby/lib/jruby.jar /opt/libjffi-1.2.so
 
-# Set the working directory
-WORKDIR ${LOGSTASH_SRC_DIR}
+WORKDIR /data
 
-# Define mountable directory
 VOLUME ${DATA_DIR}
 
-# Kibana
 EXPOSE 9292
 
-# Start logstash
-ENTRYPOINT ["/app/bin/boot"]
-
-# Valid commands: `agent`, `web`, `configtest`
-# Default (empty command) runs the ELK stack
-CMD []
-
+CMD ["/opt/logstash/bin/logstash", "agent", "-f", "logstash-simple.conf"]
