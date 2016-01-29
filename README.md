@@ -1,5 +1,5 @@
-# Logstash Docker base image for armhf devices
+# Logstash for armhf
 
-Use the base image at https://hub.docker.com/r/armhfbuild/logstash
+[![Build Status](https://drone.thisone.rocks/api/badges/armhf-docker-library/logstash/status.svg)](https://drone.thisone.rocks/armhf-docker-library/logstash)
 
-This Dockerfile uses https://github.com/docker-library/logstash/blob/722165120c05043a69c0482d7fecaff404428e51/1.5/Dockerfile with modified base image. 
+See [armhfbuild/logstash](https://hub.docker.com/r/armhfbuild/logstash/) on Docker Hub.
