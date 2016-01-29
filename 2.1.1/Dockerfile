@@ -2,7 +2,7 @@ FROM armhfbuild/java:openjdk-8-jre
 
 # install plugin dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-		libzmq3 \
+		libzmq3 logrotate \
 	&& rm -rf /var/lib/apt/lists/*
 
 # the "ffi-rzmq-core" gem is very picky about where it looks for libzmq.so
