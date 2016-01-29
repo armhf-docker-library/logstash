@@ -1,6 +1,6 @@
 matrix:
   VERSION:
-    - "2.0"
+    - "1.5.4"
     - "2.1.1"
 
 publish:

@@ -10,7 +10,6 @@ RUN cd /tmp && \
     mv ./logstash-${LOGSTASH_VERSION} ${LOGSTASH_SRC_DIR} && \
     rm ./logstash-${LOGSTASH_VERSION}.tar.gz
 
-
 RUN apt-get update && apt-get install -y zip && apt-get clean
 RUN mkdir -p /opt/logstash/vendor/jruby/lib/jni/arm-Linux
 
