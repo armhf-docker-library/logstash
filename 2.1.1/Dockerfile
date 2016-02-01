@@ -31,9 +31,22 @@ RUN curl -fsSL $LOGSTASH_REPO_BASE/pool/main/l/logstash/logstash_${LOGSTASH_VERS
 	&& dpkg -i logstash.deb \
 	&& rm logstash.deb
 
+COPY libjffi-1.2.so /opt/logstash/vendor/jruby/lib/jni/arm-Linux/
+
+# http://aspectized.com/2015/11/elasticsearch-2-stack-on-odroid-ubuntu-15/
+#
+# RUN mkdir /build-jffi && cd /build-jffi \
+# 	&& apt-get update && apt-get install -y git ant \
+#   && git clone https://github.com/jnr/jffi.git . \
+# 	&& ant jar
+#
+#   && cp ./build/libjffi-1.2.so /opt/logstash/vendor/jruby/lib/jni/arm-Linux/
+
+
 ENV PATH /opt/logstash/bin:$PATH
 
 COPY docker-entrypoint.sh /
+COPY logstash-simple.conf /etc/logstash/
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["logstash", "agent"]
+CMD ["logstash", "agent", "--config", "/etc/logstash/logstash-simple.conf"]
