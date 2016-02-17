@@ -1,10 +1,12 @@
 matrix:
   VERSION:
-    - "1.5.4"
-    - "2.1.1"
+    # - "1.5.4"
+    # - "2.1.1"
+    - "2.2.1-1"
 
 publish:
-  docker:
+  hub_2.2.1-1:
+    image: armhfplugins/drone-docker
     file: "$$VERSION/Dockerfile"
     context: "$$VERSION"
     username: $$DOCKER_USER
@@ -14,3 +16,20 @@ publish:
     tag: "$$VERSION"
     force_tag: true
     storage_driver: overlay
+    build_args:
+      - LOGSTASH_MAJOR=2.2
+      - LOGSTASH_VERSION=2.2.1-1
+    tag:
+      - "2.2.1-1"
+      - "2.2.1"
+      - "2.2"
+      - "2"
+      - "latest"
+    when:
+      matrix:
+        VERSION: "2.2.1-1"
+
+notify:
+  slack:
+    webhook_url: $$SLACK_WEBHOOK_URL
+    channel: armhf
